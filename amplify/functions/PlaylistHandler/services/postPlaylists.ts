@@ -1,0 +1,25 @@
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { DynamoDB } from 'aws-sdk';
+import { v4 as uuidv4 } from 'uuid';
+import { jsonResponse } from '../../utils/response';
+import { env } from "$amplify/env/PlaylistHandler"
+
+
+const db = new DynamoDB.DocumentClient();
+
+export const postPlaylists = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    const userId = event.requestContext.authorizer?.jwt?.claims?.sub;
+    if (!userId) return jsonResponse(401, { message: 'Unauthorized' });
+
+    const body = JSON.parse(event.body || '{}');
+    const playlistId = uuidv4();
+    const item = {
+        id: playlistId,
+        userId,
+        name: body.name,
+        createdAt: new Date().toISOString(),
+    };
+
+    await db.put({ TableName: env.PLAYLIST_TABLE_NAME!, Item: item }).promise();
+    return jsonResponse(201, { playlist: item });
+};
