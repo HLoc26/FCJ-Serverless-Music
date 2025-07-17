@@ -17,6 +17,7 @@ const useLogin = () => {
 
             const session = await Auth.fetchAuthSession();
             const currentUser: User = {
+                id: user.userId,
                 username: user.username,
                 email: session.tokens?.idToken?.payload.email?.toString() ?? "",
                 displayName: session.tokens?.idToken?.payload.preferred_username?.toString() ?? "",

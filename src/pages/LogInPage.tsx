@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import type { User } from "../interfaces";
 import Toaster, { type ToasterType } from "../components/shared/Toaster";
 import useLogin from "../hooks/useLogin";
+import LoadingSpinner from "../components/shared/LoadingSpinner";
 
 interface LoginPageProps {
 	setCurrentUser: Dispatch<SetStateAction<User | null>>;
@@ -16,11 +17,13 @@ const LogInPage: React.FC<LoginPageProps> = ({ setCurrentUser, setIsAuthenticate
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [toast, setToast] = useState<{ message: string; type: ToasterType } | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const [login] = useLogin();
 
 	const loginHandler = useCallback(
 		async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+			setIsLoading(true);
 			e.preventDefault();
 
 			console.log(email, password);
@@ -29,6 +32,7 @@ const LogInPage: React.FC<LoginPageProps> = ({ setCurrentUser, setIsAuthenticate
 				const { currentUser, success, message } = await login({ email, password });
 
 				if (success) {
+					setIsLoading(false);
 					setIsAuthenticated(true);
 					setCurrentUser(currentUser);
 					// TODO: Connect to RDS to get user info
@@ -38,6 +42,8 @@ const LogInPage: React.FC<LoginPageProps> = ({ setCurrentUser, setIsAuthenticate
 				}
 			} catch (error: any) {
 				setToast({ message: error.message || "Login failed!", type: "error" });
+			} finally {
+				setIsLoading(false);
 			}
 		},
 		[email, password, setCurrentUser, setIsAuthenticated, login]
@@ -78,8 +84,13 @@ const LogInPage: React.FC<LoginPageProps> = ({ setCurrentUser, setIsAuthenticate
 						className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
 					/>
 				</div>
-				<button type="submit" onClick={(e) => loginHandler(e)} className="w-80 py-3 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 hover:cursor-pointer transition">
-					Login
+				<button
+					type="submit"
+					disabled={isLoading ? true : false}
+					onClick={(e) => loginHandler(e)}
+					className="w-80 py-3 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 hover:cursor-pointer transition"
+				>
+					{isLoading ? <LoadingSpinner text="Login" /> : <>Login</>}
 				</button>
 			</form>
 			<p className="mt-6 text-gray-700">

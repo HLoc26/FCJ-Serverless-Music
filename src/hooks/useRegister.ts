@@ -4,28 +4,11 @@ import { useNavigate } from "react-router-dom";
 import * as Auth from "aws-amplify/auth";
 import type { ToasterType } from "../components/shared/Toaster";
 
+import { validatePassword } from "../utils/validatePassword";
+
 export const useRegister = () => {
     const navigate = useNavigate();
     const [toast, setToast] = useState<{ message: string; type: ToasterType } | null>(null);
-
-    const validatePassword = (password: string): string | null => {
-        if (password.length < 8) {
-            return "Password must be at least 8 characters long.";
-        }
-        if (!/[A-Z]/.test(password)) {
-            return "Password must include at least one uppercase letter.";
-        }
-        if (!/[a-z]/.test(password)) {
-            return "Password must include at least one lowercase letter.";
-        }
-        if (!/\d/.test(password)) {
-            return "Password must include at least one number.";
-        }
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-            return "Password must include at least one special character.";
-        }
-        return null;
-    };
 
     const register = useCallback(
         async (email: string, username: string, password: string, retypePassword: string) => {

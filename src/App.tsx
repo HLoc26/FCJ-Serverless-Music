@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "./components/layouts/MainLayout/MainLayout";
@@ -11,14 +11,24 @@ import ConfirmSignupPage from "./pages/ConfirmSignup";
 import LandingPage from "./pages/LandingPage";
 import LogOutPage from "./pages/LogOutPage";
 import { useAuthUser } from "./hooks/useAuthUser";
+import ProfilePage from "./pages/ProfilePage";
+import MyPlaylistPage from "./pages/MyPlaylistsPage";
+import MyTracksPage from "./pages/MyTracksPage";
+import UploadPage from "./pages/UploadPage";
+import type { ActiveTab } from "./types/ActiveTab.t";
 
 const App: React.FC = () => {
 	const { currentUser, setCurrentUser, isAuthenticated, setIsAuthenticated } = useAuthUser();
+	const [activeTab, setActiveTab] = useState<ActiveTab>("home");
 
 	return (
 		<Routes>
-			<Route path="/" element={<MainLayout currentUser={currentUser} />}>
+			<Route path="/" element={<MainLayout activeTab={activeTab} currentUser={currentUser} onChangeTab={setActiveTab} />}>
 				<Route index element={<HomePage currentUser={currentUser} />} />
+				<Route path="profile" element={<ProfilePage currentUser={currentUser} />} />
+				<Route path="my-playlists" element={<MyPlaylistPage currentUser={currentUser} />} />
+				<Route path="my-tracks" element={<MyTracksPage currentUser={currentUser} />} />
+				<Route path="my-tracks/upload" element={<UploadPage currentUser={currentUser} />} />
 			</Route>
 			<Route path="landing" element={<LandingPage />} />
 			<Route path="about" element={<AboutPage />} />

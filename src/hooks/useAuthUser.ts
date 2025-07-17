@@ -26,11 +26,11 @@ export const useAuthUser = () => {
                 const session = await Auth.fetchAuthSession();
 
                 const fullUser: User = {
+                    id: user.userId,
                     username: user.username,
                     email: session.tokens?.idToken?.payload.email?.toString() ?? "",
                     displayName: session.tokens?.idToken?.payload.preferred_username?.toString() ?? "",
                     token: session.tokens?.idToken?.payload,
-                    isEmailVerified: session.tokens?.idToken?.payload.email_verified == "true" ? true : false,
                 }
 
                 setCurrentUser(fullUser);
@@ -39,11 +39,11 @@ export const useAuthUser = () => {
             } catch {
                 setIsAuthenticated(false);
                 const guest: User = {
+                    id: "",
                     username: "guest",
                     email: "",
                     displayName: "guest",
                     token: {},
-                    isEmailVerified: false,
                 };
                 setCurrentUser(guest);
                 localStorage.setItem("currentUser", JSON.stringify(guest));

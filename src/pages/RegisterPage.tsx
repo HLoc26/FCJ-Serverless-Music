@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { StepBackIcon } from "lucide-react";
 import Toaster from "../components/shared/Toaster";
 import { useRegister } from "../hooks/useRegister";
+import LoadingSpinner from "../components/shared/LoadingSpinner";
 
 const RegisterPage: React.FC = () => {
 	const navigate = useNavigate();
@@ -11,6 +12,7 @@ const RegisterPage: React.FC = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [retypePassword, setRetypePassword] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { toast, setToast, register } = useRegister();
 
@@ -82,8 +84,8 @@ const RegisterPage: React.FC = () => {
 						required
 					/>
 				</div>
-				<button type="submit" className="w-full py-3 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 hover:cursor-pointer transition">
-					Register
+				<button type="submit" disabled={isLoading ? true : false} className="w-full py-3 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 hover:cursor-pointer transition">
+					{isLoading ? <LoadingSpinner text="Register" /> : <>Register</>}
 				</button>
 			</form>
 			<p className="mt-6 text-gray-700">

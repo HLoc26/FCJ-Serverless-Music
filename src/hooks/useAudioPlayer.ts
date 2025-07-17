@@ -1,90 +1,112 @@
-import { useQuery } from "@tanstack/react-query";
-import { useRef, useState, useCallback, useEffect } from "react";
-import type { Track } from "../interfaces";
+import { useEffect, useRef, useState } from "react";
+import { type Track } from "../interfaces";
 
-export const useAudioPlayer = (trackId: string | null) => {
+export function useAudioPlayer() {
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
-    const [volume, setVolume] = useState(0.7);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [isReady, setIsReady] = useState(false);
 
-    // Fetch track data using react query
-    const { data: track, isLoading } = useQuery<Track, Error>({
-        queryKey: ["track", trackId],
-        queryFn: async () => {
-            if (!trackId) throw new Error("No track id");
-            const res = await axios.get(`/api/tracks/${trackId}`);
-            return res.data;
-        },
-        enabled: !!trackId,
+    const [currentTrack, setCurrentTrack] = useState<Track>({
+        id: "",
+        title: "",
+        duration: 0,
+        url: "",
+        playCount: 0,
+        likeCount: 0,
+        uploadedBy: "",
     });
 
-    // --- Effect 1: setup audio + event listeners ---
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [volume, setVolume] = useState(0.7);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isRepeat, setIsRepeat] = useState(false);
+    const [isShuffle, setIsShuffle] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+
+    // Set volume and mute
     useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio || !track) return;
+        if (audioRef.current) {
+            audioRef.current.volume = volume;
+            audioRef.current.muted = isMuted;
+        }
+    }, [volume, isMuted]);
 
-        audio.src = `/api/tracks/${track.id}/stream`;
-        audio.load();
-        audio.volume = volume;
-        setCurrentTime(0);
-        setIsReady(false);
+    // Play or pause
+    useEffect(() => {
+        if (!audioRef.current) return;
+        if (isPlaying) {
+            audioRef.current.play().catch(console.error);
+        } else {
+            audioRef.current.pause();
+        }
+    }, [isPlaying]);
 
-        const onTimeUpdate = () => setCurrentTime(audio.currentTime);
-        const onCanPlay = () => setIsReady(true);
-
-        audio.addEventListener("timeupdate", onTimeUpdate);
-        audio.addEventListener("canplay", onCanPlay);
-
-        return () => {
-            audio.removeEventListener("timeupdate", onTimeUpdate);
-            audio.removeEventListener("canplay", onCanPlay);
-        };
-    }, [track]);
-
-    // --- Effect 2: react to state changes ---
+    // Update currentTime
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
 
-        if (isMuted) audio.volume = 0;
-        else audio.volume = volume;
+        const timeUpdateHandler = () => setCurrentTime(audio.currentTime);
+        const endedHandler = () => {
+            if (isRepeat) {
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                setIsPlaying(false);
+            }
+        };
 
-        if (isPlaying && isReady) audio.play().catch(() => setIsPlaying(false));
-        else audio.pause();
-    }, [isPlaying, isMuted, volume, isReady]);
+        audio.addEventListener("timeupdate", timeUpdateHandler);
+        audio.addEventListener("ended", endedHandler);
 
-    // --- Callbacks: rõ ràng và không cần effect ---
-    const togglePlay = useCallback(() => setIsPlaying((p) => !p), []);
-    const toggleMute = useCallback(() => setIsMuted((m) => !m), []);
-    const play = useCallback(() => setIsPlaying(true), []);
-    const pause = useCallback(() => setIsPlaying(false), []);
-    const seek = useCallback((time: number) => {
-        const audio = audioRef.current;
-        if (audio) {
-            audio.currentTime = time;
+        return () => {
+            audio.removeEventListener("timeupdate", timeUpdateHandler);
+            audio.removeEventListener("ended", endedHandler);
+        };
+    }, [isRepeat]);
+
+    const togglePlay = () => setIsPlaying((prev) => !prev);
+    const toggleMute = () => setIsMuted((prev) => !prev);
+    const toggleRepeat = () => setIsRepeat((prev) => !prev);
+    const toggleShuffle = () => setIsShuffle((prev) => !prev);
+    const toggleLike = () => setIsLiked((prev) => !prev);
+
+    const handleSeek = (time: number) => {
+        if (audioRef.current) {
+            audioRef.current.currentTime = time;
             setCurrentTime(time);
         }
-    }, []);
+    };
+
+    const handleVolumeChange = (newVolume: number) => {
+        setVolume(newVolume);
+        setIsMuted(newVolume === 0);
+    };
+
+    const playTrack = (track: Track) => {
+        // console.log(track)
+        // console.log(audioRef)
+        setCurrentTrack(track);
+        setIsPlaying(true);
+    };
 
     return {
         audioRef,
-        track,
-        isLoading,
+        currentTrack,
         isPlaying,
-        isMuted,
         volume,
+        isMuted,
+        isRepeat,
+        isShuffle,
+        isLiked,
         currentTime,
-        duration: track?.duration || 0,
-        isReady,
 
-        play,
-        pause,
         togglePlay,
         toggleMute,
-        setVolume,
-        seek,
+        toggleRepeat,
+        toggleShuffle,
+        toggleLike,
+        handleSeek,
+        handleVolumeChange,
+        playTrack,
     };
 }

@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { formatTime } from "../../../utils/trackProcessing";
 // Progress Bar Component
 interface ProgressBarProps {
 	currentTime: number;
@@ -8,12 +9,6 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ currentTime, duration, onSeek }) => {
 	const progressRef = useRef<HTMLDivElement>(null);
-
-	const formatTime = (seconds: number): string => {
-		const mins = Math.floor(seconds / 60);
-		const secs = seconds % 60;
-		return `${mins}:${secs.toString().padStart(2, "0")}`;
-	};
 
 	const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if (progressRef.current) {
