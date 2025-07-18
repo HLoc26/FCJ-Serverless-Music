@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { StepBackIcon } from "lucide-react";
-import Toaster from "../components/shared/Toaster";
-import { useRegister } from "../hooks/useRegister";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import Toaster from "../../components/shared/Toaster";
+import { useRegister } from "../../hooks/useRegister";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
 const RegisterPage: React.FC = () => {
 	const navigate = useNavigate();

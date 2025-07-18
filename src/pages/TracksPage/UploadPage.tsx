@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { User } from "../interfaces";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
-import Toaster from "../components/shared/Toaster";
-import { useUploadTrack } from "../hooks/useUploadTrack";
-import FileDropZone from "../components/shared/FileDropZone";
-import { getAudioDuration } from "../utils/trackProcessing";
+import type { User } from "../../interfaces";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import Toaster from "../../components/shared/Toaster";
+import { useUploadTrack } from "../../hooks/useUploadTrack";
+import FileDropZone from "../../components/shared/FileDropZone";
+import { getAudioDuration } from "../../utils/trackProcessing";
 
 interface UploadPageProps {
 	currentUser: User | null;

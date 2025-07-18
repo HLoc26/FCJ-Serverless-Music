@@ -1,19 +1,10 @@
 import React from "react";
-import TrackCard from "../components/shared/TrackCard";
-import { PlaylistCard } from "../components";
-import type { Track, User } from "../interfaces";
+import TrackCard from "../../components/shared/TrackCard";
+import { PlaylistCard } from "../../components";
+import type { Track, User } from "../../interfaces";
 
 interface HomeProps {
 	currentUser: User | null;
-}
-interface Track {
-	id: string;
-	title: string;
-	duration: number;
-	url: string;
-	playCount: number;
-	likeCount: number;
-	uploadedBy: string;
 }
 // Mock data
 const mockTracks: Track[] = [

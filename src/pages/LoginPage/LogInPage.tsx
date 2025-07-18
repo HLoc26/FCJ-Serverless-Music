@@ -1,10 +1,10 @@
 import { useState, useCallback, type Dispatch, type SetStateAction } from "react";
 import { StepBackIcon } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import type { User } from "../interfaces";
-import Toaster, { type ToasterType } from "../components/shared/Toaster";
-import useLogin from "../hooks/useLogin";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import type { User } from "../../interfaces";
+import Toaster, { type ToasterType } from "../../components/shared/Toaster";
+import useLogin from "../../hooks/useLogin";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
 interface LoginPageProps {
 	setCurrentUser: Dispatch<SetStateAction<User | null>>;

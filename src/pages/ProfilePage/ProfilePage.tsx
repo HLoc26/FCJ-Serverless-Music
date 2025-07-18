@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import type { User, Track, Playlist } from "../interfaces";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
-import Toaster from "../components/shared/Toaster";
-import PlaylistCard from "../components/shared/PlaylistCard";
-import TrackCard from "../components/shared/TrackCard";
+import type { User, Track, Playlist } from "../../interfaces";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import Toaster from "../../components/shared/Toaster";
+import PlaylistCard from "../../components/shared/PlaylistCard";
+import TrackCard from "../../components/shared/TrackCard";
 import { useNavigate } from "react-router-dom";
-import { validatePassword } from "../utils/validatePassword";
+import { validatePassword } from "../../utils/validatePassword";
 
 const mockTracks: Track[] = [];
 const mockPlaylists: Playlist[] = [];

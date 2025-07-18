@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Toaster, { type ToasterType } from "../components/shared/Toaster";
+import Toaster, { type ToasterType } from "../../components/shared/Toaster";
 import * as Auth from "aws-amplify/auth";
 
 const ConfirmSignupPage: React.FC = () => {

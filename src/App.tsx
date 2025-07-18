@@ -3,19 +3,20 @@ import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "./components/layouts/MainLayout/MainLayout";
-import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
-import LogInPage from "./pages/LogInPage";
-import RegisterPage from "./pages/RegisterPage";
-import ConfirmSignupPage from "./pages/ConfirmSignup";
-import LandingPage from "./pages/LandingPage";
-import LogOutPage from "./pages/LogOutPage";
+import HomePage from "./pages/HomePage/HomePage";
+import AboutPage from "./pages/AboutPage/AboutPage";
+import LogInPage from "./pages/LoginPage/LogInPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import ConfirmSignupPage from "./pages/RegisterPage/ConfirmSignup";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import LogOutPage from "./pages/LoginPage/LogOutPage";
 import { useAuthUser } from "./hooks/useAuthUser";
-import ProfilePage from "./pages/ProfilePage";
-import MyPlaylistPage from "./pages/MyPlaylistsPage";
-import MyTracksPage from "./pages/MyTracksPage";
-import UploadPage from "./pages/UploadPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import MyPlaylistPage from "./pages/PlaylistsPage/MyPlaylistsPage";
+import MyTracksPage from "./pages/TracksPage/MyTracksPage";
+import UploadPage from "./pages/TracksPage/UploadPage";
 import type { ActiveTab } from "./types/ActiveTab.t";
+import CreatePlaylistPage from "./pages/PlaylistsPage/CreatePlayListPage";
 
 const App: React.FC = () => {
 	const { currentUser, setCurrentUser, isAuthenticated, setIsAuthenticated } = useAuthUser();
@@ -27,6 +28,7 @@ const App: React.FC = () => {
 				<Route index element={<HomePage currentUser={currentUser} />} />
 				<Route path="profile" element={<ProfilePage currentUser={currentUser} />} />
 				<Route path="my-playlists" element={<MyPlaylistPage currentUser={currentUser} />} />
+				<Route path="my-playlists/create" element={<CreatePlaylistPage currentUser={currentUser} />} />
 				<Route path="my-tracks" element={<MyTracksPage currentUser={currentUser} />} />
 				<Route path="my-tracks/upload" element={<UploadPage currentUser={currentUser} />} />
 			</Route>

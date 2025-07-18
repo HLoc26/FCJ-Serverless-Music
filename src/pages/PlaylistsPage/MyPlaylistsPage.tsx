@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { Playlist, User } from "../interfaces";
-import PlaylistCard from "../components/shared/PlaylistCard";
+import type { Playlist, User } from "../../interfaces";
+import PlaylistCard from "../../components/shared/PlaylistCard";
 import { useNavigate } from "react-router-dom";
-import Toaster from "../components/shared/Toaster";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import { CirclePlus } from "lucide-react";
 
 interface MyPlaylistPageProps {
 	currentUser: User | null;
@@ -18,7 +18,6 @@ const MyPlaylistPage: React.FC<MyPlaylistPageProps> = ({ currentUser }) => {
 
 	const [playlists, setPlaylists] = useState<Playlist[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
 	useEffect(() => {
 		if (!currentUser) {
@@ -37,8 +36,12 @@ const MyPlaylistPage: React.FC<MyPlaylistPageProps> = ({ currentUser }) => {
 	return (
 		<div className="max-w-6xl mx-auto py-8">
 			{/* {toast && <Toaster message={toast.message} type={toast.type} onClose={() => setToast(null)} />} */}
-			<h1 className="text-3xl font-bold mb-6">My Playlists</h1>
-
+			<div className="flex justify-between items-center mb-6">
+				<h1 className="text-3xl font-bold mb-6">My Playlists</h1>
+				<button onClick={() => navigate("/my-playlists/create")} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700 hover:cursor-pointer transition">
+					<CirclePlus />
+				</button>
+			</div>
 			{loading ? (
 				<LoadingSpinner text="Loading playlists..." />
 			) : playlists.length === 0 ? (

@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Auth from "aws-amplify/auth";
 import type { Dispatch, SetStateAction } from "react";
-import type { User } from "../interfaces";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import type { User } from "../../interfaces";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
 interface LogOutProps {
 	setIsAuthenticated: Dispatch<SetStateAction<boolean>>;

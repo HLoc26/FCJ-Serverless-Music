@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { Track, User } from "../interfaces";
+import type { Track, User } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
-import TrackCard from "../components/shared/TrackCard";
-import Toaster from "../components/shared/Toaster";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import TrackCard from "../../components/shared/TrackCard";
+import Toaster from "../../components/shared/Toaster";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { Upload } from "lucide-react";
 
 interface MyTrackPageProps {
@@ -39,8 +39,8 @@ const MyTrackPage: React.FC<MyTrackPageProps> = ({ currentUser }) => {
 			{toast && <Toaster message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 			<div className="flex justify-between items-center mb-6">
 				<h1 className="text-3xl font-bold">My Tracks</h1>
-				<button onClick={() => navigate("/my-tracks/upload")} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700 transition">
-					<Upload>Upload New Track</Upload>
+				<button onClick={() => navigate("/my-tracks/upload")} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700 hover:cursor-pointer transition">
+					<Upload />
 				</button>
 			</div>
 			{loading ? (
