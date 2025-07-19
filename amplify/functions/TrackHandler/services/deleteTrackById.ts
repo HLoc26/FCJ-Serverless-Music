@@ -7,7 +7,7 @@ const db = new DynamoDB.DocumentClient();
 const s3 = new S3();
 
 export const deleteTrackById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const userId = event.requestContext.authorizer?.jwt?.claims?.sub;
+    const userId = event.requestContext.authorizer?.claims?.sub;
     if (!userId) return jsonResponse(401, { message: 'Unauthorized' });
 
     const trackId = event.pathParameters?.id || event.path.split('/')[2];

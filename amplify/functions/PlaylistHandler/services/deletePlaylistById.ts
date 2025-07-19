@@ -6,7 +6,7 @@ import { env } from "$amplify/env/PlaylistHandler"
 const db = new DynamoDB.DocumentClient();
 
 export const deletePlaylistById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const userId = event.requestContext.authorizer?.jwt?.claims?.sub;
+    const userId = event.requestContext.authorizer?.claims?.sub;
     if (!userId) return jsonResponse(401, { message: 'Unauthorized' });
 
     const playlistId = event.pathParameters?.id || event.path.split('/').pop();

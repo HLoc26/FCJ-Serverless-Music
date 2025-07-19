@@ -6,7 +6,7 @@ import { env } from "$amplify/env/ListeningHistoryHandler"
 const db = new DynamoDB.DocumentClient();
 
 export const getHistory = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const userId = event.requestContext.authorizer?.jwt?.claims?.sub;
+    const userId = event.requestContext.authorizer?.claims?.sub;
     if (!userId) return jsonResponse(401, { message: 'Unauthorized' });
 
     const result = await db.query({
