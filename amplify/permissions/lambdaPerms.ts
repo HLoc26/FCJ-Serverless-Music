@@ -22,4 +22,6 @@ export function setupLambdaPermissions(backend: BackendType, tables: Tables) {
 
     // User Handler permissions
     tables.userTable.grantReadWriteData(backend.userHandler.resources.lambda);
+    tables.trackTable.grantReadWriteData(backend.userHandler.resources.lambda);
+    tables.playlistTable.grantReadWriteData(backend.userHandler.resources.lambda);
 }
