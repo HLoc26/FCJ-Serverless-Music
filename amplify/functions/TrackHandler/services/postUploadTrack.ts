@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid"
 import { DynamoDB, S3 } from "aws-sdk"
 import { env } from "$amplify/env/TrackHandler"
 import { jsonResponse } from "../../utils/response";
+import mime from "mime"
 
 const s3 = new S3()
 
@@ -13,20 +14,29 @@ export const postUploadTrack = async (event: APIGatewayProxyEvent): Promise<APIG
 
     try {
         const body = JSON.parse(event.body || "{}");
-        if (!body.title || !body.duration) {
-            return { statusCode: 400, body: JSON.stringify({ message: 'Missing title or duration' }) };
+        console.log(body)
+        if (!body.title || !body.duration || !body.fileExtension) {
+            return jsonResponse(400, { message: 'Missing title, duration or fileExtension' });
         }
+
         const trackId = uuidv4();
-        const fileKey = `tracks/${trackId}.mp3`
+        const ext = body.fileExtension.toLowerCase();
+
+        // Lấy mime type từ extension
+        const contentType = mime.getType(ext) || 'application/octet-stream';
+
+        console.log("ContentType", contentType)
+
+        // Đổi key theo đúng đuôi file
+        const fileKey = `tracks/${trackId}.${ext}`;
 
         const signedUrl = await s3.getSignedUrlPromise('putObject', {
-            Bucket: env.S3_UPLOAD_BUCKET,
+            Bucket: env.S3_UPLOAD_BUCKET!,
             Key: fileKey,
-            ContentType: 'audio/mpeg',
+            ContentType: contentType,
             Expires: 300
-        })
+        });
 
-        // Ghi metadata vào DynamoDB
         const trackUrl = `${env.CLOUDFRONT_DOMAIN}/${fileKey}`;
         const trackItem = {
             id: trackId,
@@ -38,17 +48,15 @@ export const postUploadTrack = async (event: APIGatewayProxyEvent): Promise<APIG
             createdAt: new Date().toISOString(),
         };
 
-        await dynamoDb
-            .put({
-                TableName: 'TrackTable',
-                Item: trackItem,
-            })
-            .promise();
+        await dynamoDb.put({ TableName: 'TrackTable', Item: trackItem }).promise();
+
         return jsonResponse(201, {
             id: trackId,
             uploadUrl: signedUrl,
             trackUrl,
-        })
+            contentType
+        });
+
     } catch (error: any) {
         return jsonResponse(500, { message: error.message });
     }
