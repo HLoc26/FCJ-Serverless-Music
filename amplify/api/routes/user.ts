@@ -13,4 +13,16 @@ export function createUserRoutes(restApi: RestApi, userIntegration: LambdaIntegr
         authorizationType: AuthorizationType.COGNITO,
         authorizer: cognitoAuth,
     });
+
+    const userIdPath = userPath.addResource("{id}")
+
+    userIdPath.addResource("tracks").addMethod("GET", userIntegration, {
+        authorizationType: AuthorizationType.COGNITO,
+        authorizer: cognitoAuth
+    })
+
+    // userIdPath.addResource("playlists").addMethod("GET", userIntegration, {
+    //     authorizationType: AuthorizationType.COGNITO,
+    //     authorizer: cognitoAuth
+    // })
 }
