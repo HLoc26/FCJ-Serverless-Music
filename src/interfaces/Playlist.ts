@@ -3,5 +3,5 @@ export interface Playlist {
     name: string;
     owner: string;
     trackCount: number;
-    createdAt: string;
+    createdAt?: string;
 }

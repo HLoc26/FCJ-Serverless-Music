@@ -6,4 +6,5 @@ export interface Track {
     playCount: number;
     likeCount: number;
     uploadedBy: string;
+    createdAt?: string;
 }

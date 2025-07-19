@@ -13,7 +13,6 @@ const PlaylistCard: React.FC<PlaylistCardProps> = ({ playlist, onClick }) => (
 				<Music className="w-12 h-12 text-white" />
 			</div>
 			<h3 className="font-bold text-lg text-white mb-2">{playlist.name}</h3>
-			<p className="text-sm text-gray-300 mb-3 line-clamp-2">{playlist.description}</p>
 			<div className="flex items-center space-x-4 text-xs text-gray-400">
 				<div className="flex items-center space-x-1">
 					<Music className="w-3 h-3" />
@@ -21,7 +20,7 @@ const PlaylistCard: React.FC<PlaylistCardProps> = ({ playlist, onClick }) => (
 				</div>
 				<div className="flex items-center space-x-1">
 					<User className="w-3 h-3" />
-					<span>{playlist.creator}</span>
+					<span>{playlist.owner}</span>
 				</div>
 			</div>
 		</div>

@@ -16,12 +16,13 @@ interface UploadPageProps {
 }
 
 const UploadPage: React.FC<UploadPageProps> = ({ currentUser }) => {
+	const navigate = useNavigate();
 	const [title, setTitle] = useState("");
 	const [duration, setDuration] = useState(0);
 	const [file, setFile] = useState<File | null>(null);
 	const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
-	const { uploadTrack, loading, error, success } = useUploadTrack();
+	const { uploadTrack, loading, error } = useUploadTrack();
 
 	const handleFileSelect = async (selectedFile: File) => {
 		setFile(selectedFile);
@@ -51,7 +52,7 @@ const UploadPage: React.FC<UploadPageProps> = ({ currentUser }) => {
 		if (result) {
 			setToast({ message: "Track uploaded successfully!", type: "success" });
 			setTimeout(() => {
-				// navigate("/my-tracks");
+				navigate("/my-tracks");
 				console.log("Navigate to my-tracks");
 			}, 1000);
 		} else if (error) {

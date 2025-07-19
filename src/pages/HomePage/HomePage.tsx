@@ -1,7 +1,7 @@
 import React from "react";
 import TrackCard from "../../components/shared/TrackCard";
 import { PlaylistCard } from "../../components";
-import type { Track, User } from "../../interfaces";
+import type { Playlist, Track, User } from "../../interfaces";
 
 interface HomeProps {
 	currentUser: User | null;
@@ -101,11 +101,11 @@ const mockTracks: Track[] = [
 ];
 
 const mockPlaylists: Playlist[] = [
-	{ id: "1", name: "Classic Rock Hits", description: "The greatest rock songs of all time", trackCount: 25, creator: "Music Lover" },
-	{ id: "2", name: "Chill Vibes", description: "Perfect songs for relaxation", trackCount: 18, creator: "Zen Master" },
-	{ id: "3", name: "Workout Mix", description: "High-energy tracks for your workout", trackCount: 30, creator: "Fitness Guru" },
-	{ id: "4", name: "80s Nostalgia", description: "Take a trip back to the 80s", trackCount: 22, creator: "RetroFan" },
-	{ id: "5", name: "Indie Discoveries", description: "Hidden gems from indie artists", trackCount: 15, creator: "Indie Explorer" },
+	{ id: "1", name: "Classic Rock Hits", trackCount: 25, owner: "Music Lover" },
+	{ id: "2", name: "Chill Vibes", trackCount: 18, owner: "Zen Master" },
+	{ id: "3", name: "Workout Mix", trackCount: 30, owner: "Fitness Guru" },
+	{ id: "4", name: "80s Nostalgia", trackCount: 22, owner: "RetroFan" },
+	{ id: "5", name: "Indie Discoveries", trackCount: 15, owner: "Indie Explorer" },
 ];
 
 const HomePage: React.FC<HomeProps> = ({ currentUser }) => {

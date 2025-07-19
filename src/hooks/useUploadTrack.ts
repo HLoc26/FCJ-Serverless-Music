@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axiosInstance from "../config/axios.conf";
+import axiosInstance from "../api/client";
 import { isAxiosError } from "axios";
 
 interface UploadResult {

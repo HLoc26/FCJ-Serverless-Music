@@ -15,7 +15,7 @@ const TrackInfo: React.FC<TrackInfoProps> = ({ track, isLiked, onToggleLike }) =
 		</div>{" "}
 		<div className="min-w-0">
 			<h3 className="font-semibold text-gray-900 dark:text-gray-100 truncate">{track.title}</h3>
-			<p className="text-sm text-gray-600 dark:text-gray-400 truncate">{track.artist}</p>
+			<p className="text-sm text-gray-600 dark:text-gray-400 truncate">{track.uploadedBy}</p>
 		</div>
 		<button onClick={onToggleLike} className={`p-2 rounded-full transition-colors ${isLiked ? "text-red-500 hover:text-red-600" : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"}`}>
 			<Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />

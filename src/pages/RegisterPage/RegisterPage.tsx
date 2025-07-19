@@ -16,9 +16,11 @@ const RegisterPage: React.FC = () => {
 
 	const { toast, setToast, register } = useRegister();
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		register(email, username, password, retypePassword);
+		setIsLoading(true);
+		await register(email, username, password, retypePassword);
+		setIsLoading(false);
 	};
 
 	return (
