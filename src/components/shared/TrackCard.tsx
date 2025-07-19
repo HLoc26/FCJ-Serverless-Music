@@ -6,14 +6,13 @@ import { useMusicPlayerContext } from "../../contexts/MusicPlayerContext";
 
 interface TrackCardProps {
 	track: Track;
-	onClick?: () => void;
 }
 
-const TrackCard: React.FC<TrackCardProps> = ({ track, onClick }) => {
+const TrackCard: React.FC<TrackCardProps> = ({ track }) => {
 	const { playTrack } = useMusicPlayerContext();
 
 	return (
-		<div className="bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg hover:bg-gray-700 transition-all cursor-pointer" onClick={onClick}>
+		<div className="bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg hover:bg-gray-700 transition-all cursor-pointer">
 			<div className="flex items-center space-x-4">
 				<div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-md flex items-center justify-center flex-shrink-0">
 					<Music className="w-6 h-6 text-white" />
