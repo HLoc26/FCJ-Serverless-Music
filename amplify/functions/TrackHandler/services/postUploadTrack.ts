@@ -2,6 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { v4 as uuidv4 } from "uuid"
 import { DynamoDB, S3 } from "aws-sdk"
 import { env } from "$amplify/env/TrackHandler"
+import { jsonResponse } from "../../utils/response";
 
 const s3 = new S3()
 
@@ -43,15 +44,12 @@ export const postUploadTrack = async (event: APIGatewayProxyEvent): Promise<APIG
                 Item: trackItem,
             })
             .promise();
-        return {
-            statusCode: 201,
-            body: JSON.stringify({
-                id: trackId,
-                uploadUrl: signedUrl,
-                trackUrl,
-            }),
-        };
+        return jsonResponse(201, {
+            id: trackId,
+            uploadUrl: signedUrl,
+            trackUrl,
+        })
     } catch (error: any) {
-        return { statusCode: 500, body: JSON.stringify({ message: error.message }) };
+        return jsonResponse(500, { message: error.message });
     }
 }

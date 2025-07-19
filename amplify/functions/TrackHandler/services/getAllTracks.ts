@@ -1,16 +1,17 @@
 import { APIGatewayProxyResult } from "aws-lambda";
-import { DynamoDB } from "aws-sdk"
+import { DynamoDB } from "aws-sdk";
+import { jsonResponse } from "../../utils/response";
 
 const dynamoDb = new DynamoDB.DocumentClient();
 
 export const getAllTracks = async (): Promise<APIGatewayProxyResult> => {
     const params = {
-        TableName: 'TrackTable',
+        TableName: "TrackTable",
     };
     try {
         const result = await dynamoDb.scan(params).promise();
-        return { statusCode: 200, body: JSON.stringify(result.Items) };
+        return jsonResponse(200, result.Items);
     } catch (error: any) {
-        return { statusCode: 500, body: JSON.stringify({ message: error.message }) };
+        return jsonResponse(500, { message: error.message });
     }
-}
+};

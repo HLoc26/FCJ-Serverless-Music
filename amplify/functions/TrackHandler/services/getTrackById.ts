@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
 import { DynamoDB } from "aws-sdk"
+import { jsonResponse } from "../../utils/response";
 
 const dynamoDb = new DynamoDB.DocumentClient();
 
@@ -13,11 +14,11 @@ export const getTrackById = async (event: APIGatewayProxyEvent): Promise<APIGate
     try {
         const result = await dynamoDb.get(params).promise();
         if (result.Item) {
-            return { statusCode: 200, body: JSON.stringify(result.Item) };
+            return jsonResponse(200, result.Item);
         } else {
-            return { statusCode: 404, body: JSON.stringify({ message: 'Track not found' }) };
+            return jsonResponse(404, { message: 'Track not found' });
         }
     } catch (error: any) {
-        return { statusCode: 500, body: JSON.stringify({ message: error.message }) };
+        return jsonResponse(500, { message: error.message });
     }
 }
