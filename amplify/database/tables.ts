@@ -16,6 +16,12 @@ export function createDynamoDBTables(backend: BackendType): Tables {
     const playlistTable = new dynamodb.TableV2(backend.stack, 'PlaylistTable', {
         partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
         tableName: 'PlaylistTable',
+        globalSecondaryIndexes: [
+            {
+                indexName: 'byUserId',
+                partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+            },
+        ],
     });
 
     const playlistTrackTable = new dynamodb.TableV2(backend.stack, 'PlaylistTrackTable', {
