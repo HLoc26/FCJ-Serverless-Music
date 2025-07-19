@@ -1,6 +1,6 @@
 import { defineBackend } from '@aws-amplify/backend';
 import { auth } from './auth/resource';
-import { fileBucket, webUiBucket } from './storage/resource';
+import { fileBucket } from './storage/resource';
 import { trackHandler } from "./functions/TrackHandler/resource";
 import { userHandler } from "./functions/UserHandler/resource";
 import { favouriteHandler } from "./functions/FavouriteHandler/resource";
@@ -14,7 +14,6 @@ import { addEnvironmentVariables } from './environment';
 const backend = defineBackend({
 	auth,
 	fileBucket,
-	webUiBucket,
 	trackHandler,
 	userHandler,
 	favouriteHandler,
