@@ -1,45 +1,43 @@
 import { useState } from "react";
-import axiosInstance from "../api/client";
 import { isAxiosError } from "axios";
-
-interface UploadResult {
-    uploadUrl: string;
-    id: string;
-}
+import type { GetUploadUrlResult, PutFileResult, UploadResult, UploadTrackParams } from "../interfaces/api/Upload";
+import { postUploadTrack, putTrackFile } from "../api/tracks/uploadTrack";
 
 export function useUploadTrack() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
-    const uploadTrack = async ({ title, duration, file }: { title: string; duration: number; file: File }): Promise<UploadResult | null> => {
+    const uploadTrack = async ({ title, duration, file }: UploadTrackParams): Promise<UploadResult | null> => {
         setLoading(true);
         setError(null);
         setSuccess(null);
 
-        console.log(title, duration, file.type)
-
-        if (duration == 0) return null;
+        if (duration === 0) {
+            setError("Invalid track duration.");
+            setLoading(false);
+            return null;
+        }
 
         try {
-            // Step 1: POST to get signed URL
-            const { data } = await axiosInstance.post<UploadResult>("/tracks/upload", {
-                title,
-                duration,
+            const { uploadUrl, id, trackUrl, contentType }: GetUploadUrlResult = await postUploadTrack({
+                title: title,
+                duration: duration,
+                fileExtension: file.name.split('.').pop()?.toLowerCase() || '',
             });
 
-            const { uploadUrl, id } = data;
+            console.log({ uploadUrl, id, trackUrl, contentType })
 
-            // Step 2: PUT file to signed URL
-            await axiosInstance.put(uploadUrl, file, {
-                headers: {
-                    "Content-Type": file.type,
-                },
-            });
+            const result: PutFileResult = await putTrackFile({ uploadUrl, file, contentType });
 
-            setSuccess("Upload successful");
-            return { uploadUrl, id };
-        } catch (err: any) {
+            if (result.isSuccess) {
+                setSuccess("Upload successful");
+                return { uploadUrl, id };
+            }
+
+            throw new Error(result.message);
+        } catch (err) {
+            console.error(err)
             if (isAxiosError(err)) {
                 setError(err.response?.data?.message || err.message || "Upload failed");
             } else {
