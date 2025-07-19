@@ -13,7 +13,7 @@ export const getAudioDuration = (file: File): Promise<number> => {
                 const arrayBuffer = event.target?.result as ArrayBuffer;
                 const audioContext = new AudioContext();
                 const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                resolve(audioBuffer.duration);
+                resolve(Math.round(audioBuffer.duration));
             } catch (err) {
                 reject("Failed to decode audio file");
             }
