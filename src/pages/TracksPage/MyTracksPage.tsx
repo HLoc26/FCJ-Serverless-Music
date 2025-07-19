@@ -5,20 +5,17 @@ import TrackCard from "../../components/shared/TrackCard";
 import Toaster from "../../components/shared/Toaster";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { Upload } from "lucide-react";
+import { getUserTracks } from "../../api/tracks/getTracks";
 
 interface MyTrackPageProps {
 	currentUser: User | null;
 }
 
-const mockTracks: Track[] = [
-	// Thêm vài track giả lập nếu cần để test
-];
-
 const MyTrackPage: React.FC<MyTrackPageProps> = ({ currentUser }) => {
 	const navigate = useNavigate();
 
 	const [tracks, setTracks] = useState<Track[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 	const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
 	useEffect(() => {
@@ -27,11 +24,19 @@ const MyTrackPage: React.FC<MyTrackPageProps> = ({ currentUser }) => {
 			return;
 		}
 
-		// TODO: Fetch API để lấy track của user
-		setTimeout(() => {
-			setTracks(mockTracks);
-			setLoading(false);
-		}, 800);
+		const fetchTracks = async () => {
+			try {
+				setIsLoading(true);
+				const response = await getUserTracks(currentUser.id);
+				setTracks(response.data);
+			} catch (error: any) {
+				console.error(error);
+				setToast({ message: error.message, type: "error" });
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchTracks();
 	}, [currentUser, navigate]);
 
 	return (
@@ -43,7 +48,7 @@ const MyTrackPage: React.FC<MyTrackPageProps> = ({ currentUser }) => {
 					<Upload />
 				</button>
 			</div>
-			{loading ? (
+			{isLoading ? (
 				<LoadingSpinner text="Loading tracks..." />
 			) : tracks.length === 0 ? (
 				<p className="text-gray-500">You haven't uploaded any tracks yet.</p>

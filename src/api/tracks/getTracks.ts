@@ -10,3 +10,12 @@ export const getTracks = async () => {
         throw error;
     }
 }
+
+export const getUserTracks = async (userId: string) => {
+    if (!userId) {
+        throw new Error("Invalid userId")
+    }
+
+    const response = await axiosInstance.get(`user/${userId}/tracks`)
+    return response
+}
