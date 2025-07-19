@@ -1,4 +1,4 @@
-import { User as UserIcon, Music } from "lucide-react";
+import { User as UserIcon, Music, HomeIcon } from "lucide-react";
 
 import NavButton from "../../shared/NavButton";
 import type { ActiveTab } from "../../../types/ActiveTab.t";
@@ -15,6 +15,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onChangeTab }) => {
 				<div className="mb-6">
 					<h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Navigation</h2>
 					<div className="space-y-1">
+						<div onClick={() => onChangeTab("home")}>
+							<NavButton isActive={activeTab == "home"} icon={<HomeIcon className="w-5 h-5" />} label="Home" to="/" />
+						</div>
 						<div onClick={() => onChangeTab("profile")}>
 							<NavButton isActive={activeTab == "profile"} icon={<UserIcon className="w-5 h-5" />} label="My Profile" to="/profile" />
 						</div>
