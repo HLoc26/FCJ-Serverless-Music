@@ -15,7 +15,7 @@ export const getPlaylists = async (event: APIGatewayProxyEvent): Promise<APIGate
             TableName: env.PLAYLIST_TABLE_NAME!,
             IndexName: 'byUserId',
             KeyConditionExpression: '#uid = :uid',
-            ExpressionAttributeNames: { '#uid': 'userId' },
+            ExpressionAttributeNames: { '#uid': 'owner' },
             ExpressionAttributeValues: { ':uid': userId },
         };
 

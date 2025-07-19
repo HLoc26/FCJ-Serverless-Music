@@ -15,7 +15,7 @@ export const postPlaylists = async (event: APIGatewayProxyEvent): Promise<APIGat
     const playlistId = uuidv4();
     const item = {
         id: playlistId,
-        userId,
+        owner: userId,
         name: body.name,
         createdAt: new Date().toISOString(),
     };
