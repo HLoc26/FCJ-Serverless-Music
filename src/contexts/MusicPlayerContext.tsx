@@ -8,7 +8,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 	return (
 		<MusicPlayerContext.Provider value={player}>
 			<audio ref={player.audioRef} src={player.currentTrack.url} preload="metadata" />
-			{children}{" "}
+			{children}
 		</MusicPlayerContext.Provider>
 	);
 };
