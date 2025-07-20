@@ -51,9 +51,8 @@ export const postUploadTrack = async (event: APIGatewayProxyEvent): Promise<APIG
         await dynamoDb.put({ TableName: 'TrackTable', Item: trackItem }).promise();
 
         return jsonResponse(201, {
-            id: trackId,
+            trackItem,
             uploadUrl: signedUrl,
-            trackUrl,
             contentType
         });
 
