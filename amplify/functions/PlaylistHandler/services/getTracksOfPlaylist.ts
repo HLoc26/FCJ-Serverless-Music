@@ -11,19 +11,43 @@ export const getTracksOfPlaylist = async (
     const playlistId = event.pathParameters?.id;
     if (!playlistId) return jsonResponse(400, { message: 'Missing playlist ID' });
 
-    const params = {
-        TableName: env.PLAYLIST_TRACK_TABLE_NAME,
-        KeyConditionExpression: 'playlistId = :pid',
-        ExpressionAttributeValues: {
-            ':pid': playlistId,
-        },
-    };
-
     try {
-        const result = await db.query(params).promise();
-        return jsonResponse(200, result.Items);
+        const playlistTrackResult = await db.query({
+            TableName: env.PLAYLIST_TRACK_TABLE_NAME,
+            KeyConditionExpression: 'playlistId = :pid',
+            ExpressionAttributeValues: {
+                ':pid': playlistId,
+            },
+        }).promise();
+
+        const trackIds = playlistTrackResult.Items?.map(item => item.trackId) || [];
+
+        if (trackIds.length === 0) {
+            return jsonResponse(200, []);
+        }
+
+        const batches: string[][] = [];
+        for (let i = 0; i < trackIds.length; i += 100) {
+            batches.push(trackIds.slice(i, i + 100));
+        }
+
+        let tracks: any[] = [];
+
+        for (const batch of batches) {
+            const batchResult = await db.batchGet({
+                RequestItems: {
+                    [env.TRACK_TABLE_NAME]: {
+                        Keys: batch.map(id => ({ id })),
+                    },
+                },
+            }).promise();
+
+            tracks = tracks.concat(batchResult.Responses?.[env.TRACK_TABLE_NAME] || []);
+        }
+
+        return jsonResponse(200, tracks);
     } catch (error: any) {
-        console.error('Error querying tracks by playlistId:', error);
+        console.error('Error getting tracks of playlist:', error);
         return jsonResponse(500, { message: error.message });
     }
 };

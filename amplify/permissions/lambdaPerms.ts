@@ -10,6 +10,7 @@ export function setupLambdaPermissions(backend: BackendType, tables: Tables) {
 
     // Playlist Handler permissions
     tables.playlistTable.grantReadWriteData(backend.playlistHandler.resources.lambda);
+    tables.trackTable.grantReadData(backend.playlistHandler.resources.lambda);
     tables.playlistTrackTable.grantReadWriteData(backend.playlistHandler.resources.lambda);
 
     // Track Handler permissions
