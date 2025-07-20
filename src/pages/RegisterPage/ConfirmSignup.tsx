@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Toaster, { type ToasterType } from "../../components/shared/Toaster";
+import Toaster from "../../components/shared/Toaster";
 import * as Auth from "aws-amplify/auth";
+import type { ToasterProps } from "../../interfaces/Toaster";
 
 const ConfirmSignupPage: React.FC = () => {
 	const [otp, setOtp] = useState("");
-	const [toast, setToast] = useState<{ message: string; type: ToasterType } | null>(null);
+	const [toast, setToast] = useState<ToasterProps | null>(null);
 	const [redirect, setRedirect] = useState(false);
 	const location = useLocation();
 	const navigate = useNavigate();

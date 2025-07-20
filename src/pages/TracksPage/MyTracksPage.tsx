@@ -5,7 +5,8 @@ import TrackCard from "../../components/shared/TrackCard";
 import Toaster from "../../components/shared/Toaster";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { Upload } from "lucide-react";
-import { getUserTracks } from "../../api/tracks";
+import { getUserTracks } from "../../api/users";
+import type { ToasterProps } from "../../interfaces/Toaster";
 
 interface MyTrackPageProps {
 	currentUser: User | null;
@@ -16,7 +17,7 @@ const MyTrackPage: React.FC<MyTrackPageProps> = ({ currentUser }) => {
 
 	const [tracks, setTracks] = useState<Track[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+	const [toast, setToast] = useState<ToasterProps | null>(null);
 
 	useEffect(() => {
 		if (!currentUser) {

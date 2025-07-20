@@ -6,6 +6,7 @@ import Toaster from "../../components/shared/Toaster";
 import { useUploadTrack } from "../../hooks/useUploadTrack";
 import FileDropZone from "../../components/shared/FileDropZone";
 import { getAudioDuration } from "../../utils/trackProcessing";
+import type { ToasterProps } from "../../interfaces/Toaster";
 
 interface UploadPageProps {
 	currentUser: User | null;
@@ -17,7 +18,7 @@ const UploadPage: React.FC<UploadPageProps> = ({ currentUser }) => {
 	const [title, setTitle] = useState("");
 	const [duration, setDuration] = useState(0);
 	const [file, setFile] = useState<File | null>(null);
-	const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+	const [toast, setToast] = useState<ToasterProps | null>(null);
 
 	const { uploadTrack, loading, error } = useUploadTrack();
 

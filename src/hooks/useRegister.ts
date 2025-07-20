@@ -2,13 +2,13 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Auth from "aws-amplify/auth";
-import type { ToasterType } from "../components/shared/Toaster";
 
 import { validatePassword } from "../utils/validatePassword";
+import type { ToasterProps } from "../interfaces/Toaster";
 
 export const useRegister = () => {
     const navigate = useNavigate();
-    const [toast, setToast] = useState<{ message: string; type: ToasterType } | null>(null);
+    const [toast, setToast] = useState<ToasterProps | null>(null);
 
     const register = useCallback(
         async (email: string, username: string, password: string, retypePassword: string) => {

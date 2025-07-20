@@ -2,9 +2,10 @@ import { useState, useCallback, type Dispatch, type SetStateAction } from "react
 import { StepBackIcon } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import type { User } from "../../interfaces";
-import Toaster, { type ToasterType } from "../../components/shared/Toaster";
+import Toaster from "../../components/shared/Toaster";
 import useLogin from "../../hooks/useLogin";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import type { ToasterProps } from "../../interfaces/Toaster";
 
 interface LoginPageProps {
 	setCurrentUser: Dispatch<SetStateAction<User | null>>;
@@ -16,7 +17,7 @@ const LogInPage: React.FC<LoginPageProps> = ({ setCurrentUser, setIsAuthenticate
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [toast, setToast] = useState<{ message: string; type: ToasterType } | null>(null);
+	const [toast, setToast] = useState<ToasterProps | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [login] = useLogin();

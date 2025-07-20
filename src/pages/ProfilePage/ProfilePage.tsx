@@ -6,6 +6,7 @@ import PlaylistCard from "../../components/shared/PlaylistCard";
 import TrackCard from "../../components/shared/TrackCard";
 import { useNavigate } from "react-router-dom";
 import { validatePassword } from "../../utils/validatePassword";
+import type { ToasterProps } from "../../interfaces/Toaster";
 
 const mockTracks: Track[] = [];
 const mockPlaylists: Playlist[] = [];
@@ -30,7 +31,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
 
 	const [displayName, setDisplayName] = useState(currentUser?.displayName);
 	const [password, setPassword] = useState("");
-	const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+	const [toast, setToast] = useState<ToasterProps | null>(null);
 	const [loading, setLoading] = useState(false);
 
 	const handleUpdate = (e: React.FormEvent) => {
