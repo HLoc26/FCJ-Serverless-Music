@@ -33,6 +33,18 @@ export const postTrackToPlaylist = async (
             })
             .promise();
 
+        // Sau khi put thành công
+        await db.update({
+            TableName: env.PLAYLIST_TABLE_NAME,
+            Key: { id: playlistId },
+            UpdateExpression: 'SET trackCount = if_not_exists(trackCount, :zero) + :inc',
+            ExpressionAttributeValues: {
+                ':inc': 1,
+                ':zero': 0,
+            },
+        }).promise();
+
+
         return jsonResponse(201, { added: item });
     } catch (error: any) {
         if (error.code === 'ConditionalCheckFailedException') {
