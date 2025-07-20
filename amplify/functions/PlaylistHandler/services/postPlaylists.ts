@@ -12,14 +12,19 @@ export const postPlaylists = async (event: APIGatewayProxyEvent): Promise<APIGat
     if (!userId) return jsonResponse(401, { message: 'Unauthorized' });
 
     const body = JSON.parse(event.body || '{}');
-    const playlistId = uuidv4();
-    const item = {
-        id: playlistId,
-        owner: userId,
-        name: body.name,
-        createdAt: new Date().toISOString(),
-    };
+    try {
+        const playlistId = uuidv4();
+        const item = {
+            id: playlistId,
+            owner: userId,
+            name: body.name,
+            trackCount: 0,
+            createdAt: new Date().toISOString(),
+        };
 
-    await db.put({ TableName: env.PLAYLIST_TABLE_NAME!, Item: item }).promise();
-    return jsonResponse(201, { playlist: item });
+        await db.put({ TableName: env.PLAYLIST_TABLE_NAME!, Item: item }).promise();
+        return jsonResponse(201, { playlist: item });
+    } catch (error: any) {
+        return jsonResponse(500, { message: error.message })
+    }
 };

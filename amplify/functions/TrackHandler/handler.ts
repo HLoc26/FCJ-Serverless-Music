@@ -12,5 +12,5 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     // POST /tracks/upload
     else if (event.httpMethod === 'POST' && event.path === '/tracks/upload') return await postUploadTrack(event)
     // INVALID REQUEST
-    return { statusCode: 400, body: JSON.stringify({ message: 'Invalid request' }) };
+    return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }) };
 };

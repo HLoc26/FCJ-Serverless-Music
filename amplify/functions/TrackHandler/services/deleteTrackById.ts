@@ -15,7 +15,7 @@ export const deleteTrackById = async (event: APIGatewayProxyEvent): Promise<APIG
 
     // Get track item
     const track = await db.get({
-        TableName: 'TrackTable',
+        TableName: env.TRACK_TABLE_NAME,
         Key: { id: trackId },
     }).promise();
 
@@ -35,11 +35,74 @@ export const deleteTrackById = async (event: APIGatewayProxyEvent): Promise<APIG
 
     // Delete from TrackTable
     await db.delete({
-        TableName: 'TrackTable',
+        TableName: env.TRACK_TABLE_NAME,
         Key: { id: trackId },
     }).promise();
 
-    // TODO: Optional - clean up PlaylistTrackTable, FavouriteTable, PlaybackHistoryTable
+    // ======== Delete from PlaylistTrackTable and update Playlist ========
+    const playlistTrackRes = await db.query({
+        TableName: env.PLAYLIST_TRACK_TABLE_NAME,
+        IndexName: 'byTrackId', // GSI: trackId -> id, playlistId
+        KeyConditionExpression: 'trackId = :tid',
+        ExpressionAttributeValues: { ':tid': trackId },
+    }).promise();
 
-    return jsonResponse(200, { deleted: trackId });
+    const playlistTrackItems = playlistTrackRes.Items || [];
+
+    for (const pt of playlistTrackItems) {
+        // Delete entry
+        await db.delete({
+            TableName: env.PLAYLIST_TRACK_TABLE_NAME,
+            Key: { id: pt.id }, // or { playlistId, trackId } if composite key
+        }).promise();
+
+        // Decrement trackCount in PlaylistTable
+        await db.update({
+            TableName: env.PLAYLIST_TABLE_NAME,
+            Key: { id: pt.playlistId },
+            UpdateExpression: 'ADD trackCount :dec',
+            ExpressionAttributeValues: {
+                ':dec': -1,
+            },
+        }).promise();
+    }
+
+    // ======== Delete from FavouriteTable ========
+    const favRes = await db.query({
+        TableName: env.FAVOURITE_TABLE_NAME,
+        IndexName: 'byTrackId', // GSI: trackId -> id or favouriteListId
+        KeyConditionExpression: 'trackId = :tid',
+        ExpressionAttributeValues: { ':tid': trackId },
+    }).promise();
+
+    const favItems = favRes.Items || [];
+    for (const fav of favItems) {
+        await db.delete({
+            TableName: env.FAVOURITE_TABLE_NAME,
+            Key: { id: fav.id }, // or { favouriteListId, trackId } if composite
+        }).promise();
+    }
+
+    // ======== Delete from PlaybackHistoryTable ========
+    const historyRes = await db.query({
+        TableName: env.PLAYBACK_HISTORY_TABLE_NAME,
+        IndexName: 'byTrackId', // GSI: trackId -> id or userId
+        KeyConditionExpression: 'trackId = :tid',
+        ExpressionAttributeValues: { ':tid': trackId },
+    }).promise();
+
+    const historyItems = historyRes.Items || [];
+    for (const h of historyItems) {
+        await db.delete({
+            TableName: env.PLAYBACK_HISTORY_TABLE_NAME,
+            Key: { id: h.id }, // or { userId, trackId } if composite
+        }).promise();
+    }
+
+    return jsonResponse(200, {
+        deleted: trackId,
+        removedFromPlaylists: playlistTrackItems.map(pt => pt.playlistId),
+        removedFromFavourites: favItems.length,
+        removedFromHistories: historyItems.length,
+    });
 };

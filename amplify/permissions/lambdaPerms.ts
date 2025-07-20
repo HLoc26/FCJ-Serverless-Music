@@ -16,6 +16,7 @@ export function setupLambdaPermissions(backend: BackendType, tables: Tables) {
     backend.fileBucket.resources.bucket.grantPut(backend.trackHandler.resources.lambda);
     backend.fileBucket.resources.bucket.grantDelete(backend.trackHandler.resources.lambda);
     tables.trackTable.grantReadWriteData(backend.trackHandler.resources.lambda);
+    tables.playlistTable.grantReadWriteData(backend.trackHandler.resources.lambda);
     tables.playlistTrackTable.grantReadWriteData(backend.trackHandler.resources.lambda);
     tables.favouriteTable.grantReadWriteData(backend.trackHandler.resources.lambda);
     tables.playbackHistoryTable.grantReadWriteData(backend.trackHandler.resources.lambda);

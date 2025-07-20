@@ -31,16 +31,11 @@ export function createDynamoDBTables(backend: BackendType): Tables {
     });
 
     const playlistTrackTable = new dynamodb.TableV2(backend.stack, 'PlaylistTrackTable', {
-        partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
+        partitionKey: { name: 'playlistId', type: dynamodb.AttributeType.STRING },
+        sortKey: { name: 'trackId', type: dynamodb.AttributeType.STRING },
         tableName: 'PlaylistTrackTable',
-        globalSecondaryIndexes: [
-            {
-                indexName: 'byPlaylistId',
-                partitionKey: { name: 'playlistId', type: dynamodb.AttributeType.STRING },
-                sortKey: { name: 'trackId', type: dynamodb.AttributeType.STRING },
-            },
-        ],
     });
+
 
     const favouriteTable = new dynamodb.TableV2(backend.stack, 'FavouriteTable', {
         partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
