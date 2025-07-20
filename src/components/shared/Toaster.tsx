@@ -1,13 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-
-export type ToasterType = "success" | "error";
-
-interface ToasterProps {
-	message: string;
-	type: ToasterType;
-	duration?: number; // ms
-	onClose?: () => void;
-}
+import type { ToasterProps } from "../../interfaces/Toaster";
 
 const Toaster: React.FC<ToasterProps> = ({ message, type, duration = 2000, onClose }) => {
 	const [progress, setProgress] = useState(100);
