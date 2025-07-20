@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { isAxiosError } from "axios";
 import type { GetUploadUrlResult, PutFileResult, UploadResult, UploadTrackParams } from "../interfaces/api/Upload";
-import { postUploadTrack, putTrackFile } from "../api/tracks/uploadTrack";
+import { postUploadTrack, putTrackFile } from "../api/tracks";
 
 export function useUploadTrack() {
     const [loading, setLoading] = useState(false);

@@ -5,8 +5,8 @@ import TrackCard from "../../components/shared/TrackCard";
 import { PlaylistCard } from "../../components";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
-import { getTracks } from "../../api/tracks/getTracks";
-import { getPlaylists } from "../../api/playlists/getPlaylists";
+import { getTracks } from "../../api/tracks";
+import { getPlaylists } from "../../api/playlists";
 
 import type { Playlist, Track, User } from "../../interfaces";
 

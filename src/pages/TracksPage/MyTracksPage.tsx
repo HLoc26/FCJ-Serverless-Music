@@ -5,7 +5,7 @@ import TrackCard from "../../components/shared/TrackCard";
 import Toaster from "../../components/shared/Toaster";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { Upload } from "lucide-react";
-import { getUserTracks } from "../../api/tracks/getTracks";
+import { getUserTracks } from "../../api/tracks";
 
 interface MyTrackPageProps {
 	currentUser: User | null;

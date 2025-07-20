@@ -1,5 +1,5 @@
 // import type { Playlist } from "../../interfaces"
-import axiosInstance from "../client"
+import axiosInstance from "./client"
 
 export const getPlaylists = async () => {
     try {

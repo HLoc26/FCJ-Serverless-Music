@@ -1,7 +1,27 @@
+// import type { Track } from "../../interfaces"
+import axiosInstance from "./client"
 import axios from "axios";
 import type { AxiosResponse } from "axios";
-import axiosInstance from "../client";
-import type { GetUploadUrlData, GetUploadUrlResult, PutFileResult } from "../../interfaces/api/Upload";
+import type { GetUploadUrlData, GetUploadUrlResult, PutFileResult } from "../interfaces/api/Upload";
+
+export const getTracks = async () => {
+    try {
+        const response = await axiosInstance.get("tracks")
+        return response
+    } catch (error: any) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export const getUserTracks = async (userId: string) => {
+    if (!userId) {
+        throw new Error("Invalid userId")
+    }
+
+    const response = await axiosInstance.get(`user/${userId}/tracks`)
+    return response
+}
 
 export const postUploadTrack = async ({ title, duration, fileExtension }: GetUploadUrlData): Promise<GetUploadUrlResult> => {
     const response = await axiosInstance.post<GetUploadUrlResult, AxiosResponse<GetUploadUrlResult>, GetUploadUrlData>("tracks/upload", {
@@ -23,8 +43,6 @@ export const putTrackFile = async ({ uploadUrl, file, contentType }: { uploadUrl
             "Content-Type": contentType,
         },
     });
-
-    console.log(response)
 
     return {
         isSuccess: response.status === 200,
