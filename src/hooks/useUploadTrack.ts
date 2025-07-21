@@ -2,11 +2,13 @@ import { useState } from "react";
 import { isAxiosError } from "axios";
 import type { GetUploadUrlResult, PutFileResult, UploadResult, UploadTrackParams } from "../interfaces/api/Upload";
 import { postUploadTrack, putTrackFile } from "../api/tracks";
+import { useCache } from "./useCache";
 
 export function useUploadTrack() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
+    const { data, setUserTracks } = useCache()
 
     const uploadTrack = async ({ title, duration, file }: UploadTrackParams): Promise<UploadResult | null> => {
         setLoading(true);
@@ -20,19 +22,21 @@ export function useUploadTrack() {
         }
 
         try {
-            const { uploadUrl, id, trackUrl, contentType }: GetUploadUrlResult = await postUploadTrack({
+            const { uploadUrl, trackItem: track, contentType }: GetUploadUrlResult = await postUploadTrack({
                 title: title,
                 duration: duration,
                 fileExtension: file.name.split('.').pop()?.toLowerCase() || '',
             });
 
-            console.log({ uploadUrl, id, trackUrl, contentType })
+            console.log({ uploadUrl, track, contentType })
 
             const result: PutFileResult = await putTrackFile({ uploadUrl, file, contentType });
 
             if (result.isSuccess) {
                 setSuccess("Upload successful");
-                return { uploadUrl, id };
+                setUserTracks([...data.userTracks, track]);
+                console.log(data.userTracks);
+                return { uploadUrl, id: track.id };
             }
 
             throw new Error(result.message);
