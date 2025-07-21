@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import type { Track, User } from "../../interfaces";
+import { useEffect } from "react";
+import type { User } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 import TrackCard from "../../components/shared/TrackCard";
 import Toaster from "../../components/shared/Toaster";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { Upload } from "lucide-react";
-import { getUserTracks } from "../../api/users";
-import type { ToasterProps } from "../../interfaces/Toaster";
+import { useUserTracks } from "../../hooks/useUserTracks";
 
 interface MyTrackPageProps {
 	currentUser: User | null;
@@ -14,30 +13,12 @@ interface MyTrackPageProps {
 
 const MyTrackPage: React.FC<MyTrackPageProps> = ({ currentUser }) => {
 	const navigate = useNavigate();
-
-	const [tracks, setTracks] = useState<Track[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
-	const [toast, setToast] = useState<ToasterProps | null>(null);
+	const { tracks, loading, toast, setToast } = useUserTracks(currentUser);
 
 	useEffect(() => {
 		if (!currentUser) {
 			navigate(-1);
-			return;
 		}
-
-		const fetchTracks = async () => {
-			try {
-				setIsLoading(true);
-				const response = await getUserTracks(currentUser.id);
-				setTracks(response.data);
-			} catch (error: any) {
-				console.error(error);
-				setToast({ message: error.message, type: "error" });
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		fetchTracks();
 	}, [currentUser, navigate]);
 
 	return (
@@ -49,7 +30,7 @@ const MyTrackPage: React.FC<MyTrackPageProps> = ({ currentUser }) => {
 					<Upload />
 				</button>
 			</div>
-			{isLoading ? (
+			{loading ? (
 				<LoadingSpinner text="Loading tracks..." />
 			) : tracks.length === 0 ? (
 				<p className="text-gray-500">You haven't uploaded any tracks yet.</p>
