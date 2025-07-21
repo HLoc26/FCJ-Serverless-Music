@@ -16,6 +16,7 @@ import MyPlaylistPage from "./pages/PlaylistsPage/MyPlaylistsPage";
 import MyTracksPage from "./pages/TracksPage/MyTracksPage";
 import UploadPage from "./pages/TracksPage/UploadPage";
 import type { ActiveTab } from "./types/ActiveTab.t";
+import PlaylistDetailPage from "./pages/PlaylistsPage/PlaylistDetailPage";
 
 const App: React.FC = () => {
 	const { currentUser, setCurrentUser, isAuthenticated, setIsAuthenticated } = useAuthUser();
@@ -29,6 +30,8 @@ const App: React.FC = () => {
 				<Route path="my-playlists" element={<MyPlaylistPage currentUser={currentUser} />} />
 				<Route path="my-tracks" element={<MyTracksPage currentUser={currentUser} />} />
 				<Route path="my-tracks/upload" element={<UploadPage currentUser={currentUser} />} />
+
+				<Route path="playlists/:id" element={<PlaylistDetailPage currentUser={currentUser} />} />
 			</Route>
 			<Route path="landing" element={<LandingPage />} />
 			<Route path="about" element={<AboutPage />} />

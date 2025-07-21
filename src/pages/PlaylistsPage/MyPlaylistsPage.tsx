@@ -1,57 +1,52 @@
-import { useEffect, useState } from "react";
-import type { Playlist, User } from "../../interfaces";
-import PlaylistCard from "../../components/shared/PlaylistCard";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { CirclePlus } from "lucide-react";
+import { useUserPlaylists } from "../../hooks/useUserPlaylists";
+
+import PlaylistCard from "../../components/shared/PlaylistCard";
 import CreatePlaylistModal from "./CreatePlayListModal";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import Toaster from "../../components/shared/Toaster";
+
+import type { Playlist, User } from "../../interfaces";
+import { useEffect, useState } from "react";
+import type { ToasterProps } from "../../interfaces/Toaster";
 
 interface MyPlaylistPageProps {
 	currentUser: User | null;
 }
 
-const mockPlaylists: Playlist[] = [
-	// Thêm data mẫu nếu cần
-];
-
 const MyPlaylistPage: React.FC<MyPlaylistPageProps> = ({ currentUser }) => {
 	const navigate = useNavigate();
 
-	const [playlists, setPlaylists] = useState<Playlist[]>([]);
-	const [loading, setLoading] = useState(true);
+	const { playlists, loading, error, refetch, setError } = useUserPlaylists(currentUser?.id || null);
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+	const [toast, setToast] = useState<ToasterProps | null>(null);
 
 	useEffect(() => {
 		if (!currentUser) {
 			navigate(-1);
-			return;
 		}
+	}, [currentUser]);
 
-		// Giả lập fetch playlist
-		setTimeout(() => {
-			// TODO: Thay bằng API thật, ví dụ: getUserPlaylists(currentUser.id)
-			setPlaylists(mockPlaylists);
-			setLoading(false);
-		}, 800);
-	}, [currentUser, navigate]);
+	useEffect(() => {
+		if (error) {
+			setToast(error);
+			setError(null);
+		}
+	}, [error]);
 
-	const fetchPlaylists = () => {
-		setLoading(true);
-		// Giả lập fetch playlist
-		setTimeout(() => {
-			// TODO: Thay bằng API thật, ví dụ: getUserPlaylists(currentUser.id)
-			setPlaylists(mockPlaylists);
-			setLoading(false);
-		}, 800);
+	const handlePlaylistCreated = async () => {
+		await refetch();
+		setToast({ message: "Playlist created successfully!", type: "success" });
 	};
 
-	const handlePlaylistCreated = () => {
-		// Refresh playlists after creating a new one
-		fetchPlaylists();
+	const handlePlaylistCreateFail = ({ message }: { message?: string }) => {
+		setToast({ message: message || "Failed to create playlist", type: "error" });
 	};
 
 	return (
 		<div className="max-w-6xl mx-auto py-8">
+			{toast && <Toaster message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 			<div className="flex justify-between items-center mb-6">
 				<h1 className="text-3xl font-bold">My Playlists</h1>
 				<button
@@ -74,21 +69,13 @@ const MyPlaylistPage: React.FC<MyPlaylistPageProps> = ({ currentUser }) => {
 				</div>
 			) : (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{playlists.map((playlist) => (
-						<PlaylistCard
-							key={playlist.id}
-							playlist={playlist}
-							onClick={() => {
-								// TODO: chuyển đến trang chi tiết playlist nếu có
-								navigate(`/playlists/${playlist.id}`);
-							}}
-						/>
+					{playlists.map((playlist: Playlist) => (
+						<PlaylistCard key={playlist.id} playlist={playlist} onClick={() => navigate(`/playlists/${playlist.id}`)} />
 					))}
 				</div>
 			)}
 
-			{/* Create Playlist Modal */}
-			<CreatePlaylistModal currentUser={currentUser} isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} onPlaylistCreated={handlePlaylistCreated} />
+			<CreatePlaylistModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} onPlaylistCreated={handlePlaylistCreated} onCreateFailed={handlePlaylistCreateFail} />
 		</div>
 	);
 };
