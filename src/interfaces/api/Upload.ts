@@ -1,3 +1,5 @@
+import type { Track } from "../Track";
+
 export interface GetUploadUrlData {
     title: string;
     duration: number;
@@ -5,9 +7,8 @@ export interface GetUploadUrlData {
 }
 
 export interface GetUploadUrlResult {
-    id: string;
+    trackItem: Track,
     uploadUrl: string;
-    trackUrl: string;
     contentType: string;
 }
 
