@@ -1,54 +1,44 @@
-# React + TypeScript + Vite
+### Clone the project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Start by cloning the starter repository to your local machine:
 
-Currently, two official plugins are available:
+```bash
+git clone https://github.com/your-username/music-platform-serverless.git
+cd music-platform-serverless
+````
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+If you're using a fork, replace the URL with your own.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Install dependencies
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Make sure you're in the root folder of the project, then install all required packages for both the frontend and backend:
+
+```bash
+# Install backend dependencies
+cd packages/backend
+npm install
+
+# Install frontend dependencies
+cd ../frontend
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Set up AWS credentials
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+Before deploying anything, ensure your AWS credentials are configured. If you haven't already, run:
+
+```bash
+aws configure
+```
+
+You'll be prompted for your access key, secret key, region, and output format. If you're using named profiles, remember to export the profile:
+
+```bash
+export AWS_PROFILE=your-profile-name # On UNIX
+$env:AWS_PROFILE = "your-profile-name" # On Windows Powershell
+set AWS_PROFILE=your-profile-name # On CMD
 ```
