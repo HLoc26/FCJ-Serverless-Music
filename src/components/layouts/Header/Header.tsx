@@ -4,7 +4,7 @@ import { Settings, LogOut, Music, CircleQuestionMark, LogIn } from "lucide-react
 
 import NavButton from "../../shared/NavButton";
 import * as Auth from "aws-amplify/auth";
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ActiveTab } from "../../../types/ActiveTab.t";
 interface HeaderProps {
@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser, setActiveTab }) => {
 			console.log("Use the following as Bearer Token in Postman", token.tokens?.idToken?.toString());
 		};
 		f();
-	});
+	}, [currentUser]);
 
 	return (
 		<header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 px-6 py-4">
@@ -55,4 +55,4 @@ const Header: React.FC<HeaderProps> = ({ currentUser, setActiveTab }) => {
 	);
 };
 
-export default Header;
+export default memo(Header);
