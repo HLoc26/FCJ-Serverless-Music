@@ -2,13 +2,14 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
 import { DynamoDB } from "aws-sdk"
 import { jsonResponse } from "../../utils/response";
+import { env } from "$amplify/env/TrackHandler";
 
 const dynamoDb = new DynamoDB.DocumentClient();
 
 export const getTrackById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const trackId = event.pathParameters?.id;
     const params = {
-        TableName: 'TrackTable',
+        TableName: env.TRACK_TABLE_NAME,
         Key: { id: trackId },
     };
     try {
