@@ -47,10 +47,10 @@ backend.addOutput({
 		DynamoDB: {
 			UserTable: tables.userTable.tableName,
 			TrackTable: tables.trackTable.tableName,
-			PlaylistTable: tables.playlistTable.tableName,
-			PlaylistTrackTable: tables.playlistTrackTable.tableName,
-			FavouriteTable: tables.favouriteTable.tableName,
-			PlaybackHistoryTable: tables.playbackHistoryTable.tableName,
+			PlaylistTable: tables.playlistTable?.tableName,
+			PlaylistTrackTable: tables.playlistTrackTable?.tableName,
+			FavouriteTable: tables.favouriteTable?.tableName,
+			PlaybackHistoryTable: tables.playbackHistoryTable?.tableName,
 		},
 	},
 });

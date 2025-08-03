@@ -8,10 +8,10 @@ interface LoginProps {
 const useLogin = () => {
     const login = async ({ email, password }: LoginProps) => {
         try {
-            await Auth.signIn({
-                username: email,
-                password: password,
-            });
+            // await Auth.signIn({
+            //     username: email,
+            //     password: password,
+            // });
             const user = await Auth.getCurrentUser();
             console.log(user);
 

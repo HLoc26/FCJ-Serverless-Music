@@ -30,7 +30,7 @@ export function createApiGateway(backend: BackendType): { restApi: RestApi, apiS
     });
 
     const cognitoAuth = new CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
-        cognitoUserPools: [backend.auth.resources.userPool],
+        cognitoUserPools: [backend.auth?.resources?.userPool],
     });
 
     // Create Lambda integrations

@@ -29,15 +29,15 @@ export const useRegister = () => {
             }
 
             try {
-                await Auth.signUp({
-                    username: email,
-                    password,
-                    options: {
-                        userAttributes: {
-                            preferred_username: username,
-                        },
-                    },
-                });
+                // await Auth.signUp({
+                //     username: email,
+                //     password,
+                //     options: {
+                //         userAttributes: {
+                //             preferred_username: username,
+                //         },
+                //     },
+                // });
                 setToast({
                     message: "Register successful! Please check your email for the OTP code.",
                     type: "success",

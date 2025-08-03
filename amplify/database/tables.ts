@@ -19,42 +19,8 @@ export function createDynamoDBTables(backend: BackendType): Tables {
         ],
     });
 
-    const playlistTable = new dynamodb.TableV2(backend.stack, 'PlaylistTable', {
-        partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
-        tableName: 'PlaylistTable',
-        globalSecondaryIndexes: [
-            {
-                indexName: 'byUserId',
-                partitionKey: { name: 'owner', type: dynamodb.AttributeType.STRING },
-            },
-        ],
-    });
-
-    const playlistTrackTable = new dynamodb.TableV2(backend.stack, 'PlaylistTrackTable', {
-        partitionKey: { name: 'playlistId', type: dynamodb.AttributeType.STRING },
-        sortKey: { name: 'trackId', type: dynamodb.AttributeType.STRING },
-        tableName: 'PlaylistTrackTable',
-    });
-
-
-    const favouriteTable = new dynamodb.TableV2(backend.stack, 'FavouriteTable', {
-        partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
-        sortKey: { name: 'trackId', type: dynamodb.AttributeType.STRING },
-        tableName: 'FavouriteTable',
-    });
-
-    const playbackHistoryTable = new dynamodb.TableV2(backend.stack, 'PlaybackHistoryTable', {
-        partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
-        sortKey: { name: 'timestamp', type: dynamodb.AttributeType.STRING },
-        tableName: 'PlaybackHistoryTable',
-    });
-
     return {
         userTable,
-        trackTable,
-        playlistTable,
-        playlistTrackTable,
-        favouriteTable,
-        playbackHistoryTable
+        trackTable
     };
 }
