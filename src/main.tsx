@@ -11,14 +11,13 @@ import { CacheProvider } from "./contexts/CacheContext.tsx";
 Amplify.configure(outputs);
 
 createRoot(document.getElementById("root")!).render(
-	// <StrictMode>
-	<CacheProvider>
-		<MusicPlayerProvider>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</MusicPlayerProvider>
-	</CacheProvider>
-	// </StrictMode>
+	<StrictMode>
+		<CacheProvider>
+			<MusicPlayerProvider>
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
+			</MusicPlayerProvider>
+		</CacheProvider>
+	</StrictMode>
 );
-

@@ -31,7 +31,7 @@ const App: React.FC = () => {
 				<Route path="my-tracks" element={<MyTracksPage currentUser={currentUser} />} />
 				<Route path="my-tracks/upload" element={<UploadPage currentUser={currentUser} />} />
 
-				<Route path="playlists/:id" element={<PlaylistDetailPage currentUser={currentUser} />} />
+				<Route path="playlists/:id" element={<PlaylistDetailPage />} />
 			</Route>
 			<Route path="landing" element={<LandingPage />} />
 			<Route path="about" element={<AboutPage />} />
@@ -44,4 +44,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

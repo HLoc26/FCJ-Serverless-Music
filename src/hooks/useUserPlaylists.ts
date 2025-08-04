@@ -3,7 +3,7 @@ import { getUserPlaylists } from "../api/users";
 import type { Playlist } from "../interfaces";
 import type { ToasterProps } from "../interfaces/Toaster";
 import { useCache } from "./useCache";
-import { fetchUserAttributes } from "aws-amplify/auth";
+import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
 
 export const useUserPlaylists = (userId?: string | null | undefined) => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
@@ -74,8 +74,8 @@ export const useUserPlaylists = (userId?: string | null | undefined) => {
         playlists,
         loading,
         error,
-        refetch: () => {
-            const id = userId ?? data.userId; // nếu bạn có userId trong cache
+        refetch: async () => {
+            const id = userId ?? (await getCurrentUser()).userId
             if (id) return fetchPlaylists(id);
         },
         setError,

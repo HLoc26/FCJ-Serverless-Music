@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchPlaylistInfo, fetchPlaylistTracks } from "../api/playlists";
-import type { Playlist, Track, User } from "../interfaces";
+import type { Playlist, Track } from "../interfaces";
 import type { ToasterProps } from "../interfaces/Toaster";
 import { useCache } from "../hooks/useCache";
 

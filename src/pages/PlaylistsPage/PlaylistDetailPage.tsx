@@ -4,16 +4,16 @@ import TrackCard from "../../components/shared/TrackCard";
 import Toaster from "../../components/shared/Toaster";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { ArrowLeft } from "lucide-react";
-import type { User } from "../../interfaces";
+// import type { User } from "../../interfaces";
 
 interface PlaylistDetailPageProps {
-	currentUser: User | null;
+	// currentUser: User | null;
 }
-const PlaylistDetailPage: React.FC<PlaylistDetailPageProps> = ({ currentUser }) => {
+const PlaylistDetailPage: React.FC<PlaylistDetailPageProps> = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 	const { playlist, tracks, loading, toast, setToast } = usePlaylistDetail(id);
-	const isOwner = playlist?.owner === currentUser?.id; // TODO: If current user is owner, allow them to remove track
+	// const isOwner = playlist?.owner === currentUser?.id; // TODO: If current user is owner, allow them to remove track
 
 	console.log(tracks);
 

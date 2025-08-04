@@ -13,11 +13,11 @@ export function setupIAMPermissions(backend: BackendType, tables: Tables) {
             resources: [
                 tables.userTable.tableArn,
                 tables.trackTable.tableArn,
-                tables.playlistTable.tableArn,
-                tables.playlistTrackTable.tableArn,
                 `${tables.playlistTrackTable.tableArn}/index/*`,
-                tables.favouriteTable.tableArn,
-                tables.playbackHistoryTable.tableArn,
+                `${tables.playlistTable.tableArn}`,
+                `${tables.playlistTrackTable.tableArn}`,
+                `${tables.favouriteTable.tableArn}`,
+                `${tables.playbackHistoryTable.tableArn}`,
             ],
         })
     );
@@ -45,8 +45,8 @@ export function setupIAMPermissions(backend: BackendType, tables: Tables) {
             resources: [
                 tables.userTable.tableArn,
                 tables.trackTable.tableArn,
-                tables.playlistTable.tableArn,
-                tables.playlistTrackTable.tableArn,
+                `${tables.playlistTable.tableArn}`,
+                `${tables.playlistTrackTable.tableArn}`,
                 `${tables.playlistTrackTable.tableArn}/index/*`,
             ],
         })
