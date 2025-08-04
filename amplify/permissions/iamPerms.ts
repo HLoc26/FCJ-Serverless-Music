@@ -3,7 +3,7 @@ import { Tables } from '../interfaces/Tables';
 import { BackendType } from '../backend';
 
 export function setupIAMPermissions(backend: BackendType, tables: Tables) {
-    const authRole = backend.auth.resources.authenticatedUserIamRole;
+    const authRole = backend.auth?.resources.authenticatedUserIamRole;
     if (!authRole) return;
 
     // Read permissions for all tables
@@ -13,11 +13,11 @@ export function setupIAMPermissions(backend: BackendType, tables: Tables) {
             resources: [
                 tables.userTable.tableArn,
                 tables.trackTable.tableArn,
-                `${tables.playlistTrackTable.tableArn}/index/*`,
-                `${tables.playlistTable.tableArn}`,
-                `${tables.playlistTrackTable.tableArn}`,
-                `${tables.favouriteTable.tableArn}`,
-                `${tables.playbackHistoryTable.tableArn}`,
+                `${tables.playlistTrackTable?.tableArn}/index/*`,
+                `${tables.playlistTable?.tableArn}`,
+                `${tables.playlistTrackTable?.tableArn}`,
+                `${tables.favouriteTable?.tableArn}`,
+                `${tables.playbackHistoryTable?.tableArn}`,
             ],
         })
     );
@@ -27,8 +27,8 @@ export function setupIAMPermissions(backend: BackendType, tables: Tables) {
         new PolicyStatement({
             actions: ['dynamodb:PutItem', 'dynamodb:UpdateItem', 'dynamodb:DeleteItem'],
             resources: [
-                tables.favouriteTable.tableArn,
-                tables.playbackHistoryTable.tableArn,
+                `${tables.favouriteTable?.tableArn}`,
+                `${tables.playbackHistoryTable?.tableArn}`,
             ],
             conditions: {
                 'ForAllValues:StringEquals': {
@@ -45,9 +45,9 @@ export function setupIAMPermissions(backend: BackendType, tables: Tables) {
             resources: [
                 tables.userTable.tableArn,
                 tables.trackTable.tableArn,
-                `${tables.playlistTable.tableArn}`,
-                `${tables.playlistTrackTable.tableArn}`,
-                `${tables.playlistTrackTable.tableArn}/index/*`,
+                `${tables.playlistTable?.tableArn}`,
+                `${tables.playlistTrackTable?.tableArn}`,
+                `${tables.playlistTrackTable?.tableArn}/index/*`,
             ],
         })
     );

@@ -17,6 +17,6 @@ export function setupApiGatewayPermissions(backend: BackendType, restApi: RestAp
         ],
     });
 
-    backend.auth.resources.authenticatedUserIamRole.attachInlinePolicy(apiRestPolicy);
-    backend.auth.resources.unauthenticatedUserIamRole.attachInlinePolicy(apiRestPolicy);
+    backend.auth?.resources.authenticatedUserIamRole.attachInlinePolicy(apiRestPolicy);
+    backend.auth?.resources.unauthenticatedUserIamRole.attachInlinePolicy(apiRestPolicy);
 }
